@@ -16,11 +16,27 @@
                 <a class="navbar-brand" href="{{ path('app_home') }}">Phrase du jour</a>
                 <div class="navbar-nav me-auto">
                     <a class="nav-link" href="{{ path('app_home') }}">Accueil</a>
-                    <a class="nav-link" href="#">Connexion</a>
-                    <a class="nav-link" href="#">Enregistrement</a>
+                    {% if app.user %}
+                    <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
+                    {% else %}
+                    <a class="nav-link" href="{{ path('app_login') }}">Connexion</a>
+                    <a class="nav-link" href="{{ path('app_register') }}">Enregistrement</a>
+                    {% endif %}
                 </div>
             </div>
         </nav>
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success text-center mb-0">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger text-center mb-0">
+                {{ message }}
+            </div>
+        {% endfor %}
 
         <div class="container mt-4">
             {% block body %}{% endblock %}
