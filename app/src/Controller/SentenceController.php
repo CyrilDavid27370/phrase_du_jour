@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Sentence;
 use App\Repository\SentenceRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -25,5 +26,14 @@ final class SentenceController extends AbstractController
         return $this->render('sentence/show.html.twig', [
             'sentence' => $sentence,
         ]);
+    }
+
+    #[Route('/sentence/{id}/like', name: 'app_sentence_like')]
+    public function like(Sentence $sentence, EntityManagerInterface $entityManager): Response
+    {
+    $sentence->setLikes($sentence->getLikes() + 1);
+    $entityManager->flush();
+
+    return $this->redirectToRoute('app_sentence_show', ['id' => $sentence->getId()]);
     }
 }
