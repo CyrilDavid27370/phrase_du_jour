@@ -2,23 +2,23 @@
 
 {% block title %}Accueil - Phrase du jour{% endblock %}
 
+{% block stylesheets %}
+<style>
+    .table tbody tr td { background-color: #e9ecef !important; }
+    .table tbody tr td a { text-decoration: none; color: #000; }
+</style>
+{% endblock %}
+
 {% block body %}
     <h1 class="text-center mt-4">Les phrases du jour</h1>
 
-    <table class="table table-striped mt-4">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Catégorie</th>
-                <th>Likes</th>
-            </tr>
-        </thead>
+    <table class="table mt-4">
         <tbody>
             {% for sentence in sentences %}
             <tr>
                 <td>
-                    <a href="#">
-                        {{ sentence.createdAt|date('d/m/Y') }}
+                    <a href="{{ path('app_sentence_show', {id: sentence.id}) }}">
+                        la phrase du {{ sentence.createdAt|date('d/m/Y') }} 👁️
                     </a>
                 </td>
                 <td>

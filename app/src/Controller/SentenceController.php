@@ -2,12 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Sentence;
 use App\Repository\SentenceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class HomeController extends AbstractController
+final class SentenceController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
     public function index(SentenceRepository $sentenceRepository): Response
@@ -16,6 +17,13 @@ final class HomeController extends AbstractController
         
         return $this->render('home/index.html.twig', [
             'sentences' => $sentences
+        ]);
+    }
+    #[Route('/sentence/{id}', name: 'app_sentence_show')]
+    public function show(Sentence $sentence): Response
+    {
+        return $this->render('sentence/show.html.twig', [
+            'sentence' => $sentence,
         ]);
     }
 }
