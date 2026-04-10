@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Sentence;
+use App\Repository\CommentRepository;
 use App\Repository\SentenceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,10 +22,15 @@ final class SentenceController extends AbstractController
         ]);
     }
     #[Route('/sentence/{id}', name: 'app_sentence_show')]
-    public function show(Sentence $sentence): Response
-    {
-        return $this->render('sentence/show.html.twig', [
+    public function show(Sentence $sentence, CommentRepository $commentRepository): Response
+    {   
+        $comments = $commentRepository->findBy(
+            ['sentence' => $sentence], 
+            ['createdAt' => 'DESC']);
+        
+            return $this->render('sentence/show.html.twig', [
             'sentence' => $sentence,
+            'comments' => $comments
         ]);
     }
 

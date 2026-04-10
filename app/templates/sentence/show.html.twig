@@ -17,4 +17,18 @@
             </a>
         </div>
     </div>
+
+    <h3 class="mt-5">Commentaires</h3>
+
+    {% if comments is empty %}
+        <p class="text-muted">Soyez le premier à commenter !</p>
+    {% else %}
+        {% for comment in comments %}
+            <p>
+                <strong>{{ comment.author.username }}</strong>
+                (le {{ comment.createdAt|date('d/m/Y à H:i:s') }}) :
+                {{ comment.content }}
+            </p>
+        {% endfor %}
+    {% endif %}
 {% endblock %}
