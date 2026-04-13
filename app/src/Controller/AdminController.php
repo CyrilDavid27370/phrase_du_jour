@@ -46,4 +46,23 @@ final class AdminController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    #[Route('/admin/update/{id}', name: 'app_admin_update')]
+public function update(Sentence $sentence, Request $request, EntityManagerInterface $entityManager): Response
+{
+    $form = $this->createForm(SentenceType::class, $sentence);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Phrase modifiée avec succès !');
+        return $this->redirectToRoute('app_admin_index');
+    }
+
+    return $this->render('admin/update.html.twig', [
+        'form' => $form->createView(),
+        'sentence' => $sentence,
+    ]);
+}
 }

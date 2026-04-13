@@ -24,8 +24,8 @@
                         {{ sentence.category.name }}
                     </span>
                 </td>
-                <td><a href="#">✏️</a></td>
-                <td><a href="#">❌</a></td>
+                <td><a href="{{ path('app_admin_update', {id: sentence.id}) }}" class="text-decoration-none">✏️</a></td>
+                <td><a href="#" class="text-decoration-none">❌</a></td>
             </tr>
             {% endfor %}
         </tbody>
