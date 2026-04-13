@@ -11,12 +11,12 @@
 {% block body %}
     <h1 class="text-center mt-4">Espace administration</h1>
 
-    <a href="#" class="text-dark text-decoration-none mb-3 d-block">Ajouter une phrase du jour ➕</a>
+    <a href="{{ path('app_admin_add') }}" class="text-dark text-decoration-none mb-3 d-block">Ajouter une phrase du jour ➕</a>
 
     <table class="table mt-2">
         <tbody>
             {% for sentence in sentences %}
-            
+            <tr>
                 <td>{{ sentence.createdAt|date('d/m/Y') }}</td>
                 <td>{{ sentence.content }}</td>
                 <td>

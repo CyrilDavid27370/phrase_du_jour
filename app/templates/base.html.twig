@@ -18,7 +18,7 @@
                     <a class="nav-link" href="{{ path('app_home') }}">Accueil</a>
                     {% if app.user %}
                     {% if is_granted('ROLE_ADMIN') %}
-                    <a class="nav-link" href="{{ path('app_admin') }}">Admin</a>
+                    <a class="nav-link" href="{{ path('app_admin_index') }}">Admin</a>
                     {% endif %}
                     <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
                     {% else %}
