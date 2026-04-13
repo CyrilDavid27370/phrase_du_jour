@@ -20,11 +20,18 @@
 
     <h3 class="mt-5">Commentaires</h3>
 
+    {% if app.user %}
+        {{ form_start(commentForm) }}
+            {{ form_widget(commentForm.content) }}
+            <button type="submit" class="btn btn-primary mt-2">Commenter</button>
+        {{ form_end(commentForm) }}
+    {% endif %}
+
     {% if comments is empty %}
-        <p class="text-muted">Soyez le premier à commenter !</p>
+        <p class="text-muted mt-3">Soyez le premier à commenter !</p>
     {% else %}
         {% for comment in comments %}
-            <p>
+            <p class="mt-3">
                 <strong>{{ comment.author.username }}</strong>
                 (le {{ comment.createdAt|date('d/m/Y à H:i:s') }}) :
                 {{ comment.content }}
