@@ -13,7 +13,7 @@
             <h5 class="card-title">{{ sentence.createdAt|date('d/m/Y') }}</h5>
             <p class="card-text">{{ sentence.content }}</p>
             <a href="{{ path('app_sentence_like', {id: sentence.id}) }}" class="text-decoration-none">
-                👍 {{ sentence.likes }}
+                {{ isLiked ? '👍' : '👍🏻' }} {{ sentence.likes }}
             </a>
         </div>
     </div>
