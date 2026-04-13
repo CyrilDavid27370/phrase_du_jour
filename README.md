@@ -94,7 +94,9 @@ INSERT INTO user (id, username, roles, password) VALUES
 (1, 'admin', '["ROLE_ADMIN"]', '$2y$13$6kwkB37KQn7Ui/JoamxTCeG20X8N/elRuGIW95McaJli6xWvCJdbO'),
 (2, 'Hakim', '["ROLE_USER"]', '$2y$13$HhPQIYus52oyPUwKlm7ea.fO588L1PPOigcVpavrlc8o4UIGZkNi.'),
 (3, 'Mohand', '["ROLE_USER"]', '$2y$13$HhPQIYus52oyPUwKlm7ea.fO588L1PPOigcVpavrlc8o4UIGZkNi.'),
-(4, 'Cyril', '["ROLE_USER"]', '$2y$13$HhPQIYus52oyPUwKlm7ea.fO588L1PPOigcVpavrlc8o4UIGZkNi.');
+(4, 'Cyril', '["ROLE_USER"]', '$2y$13$HhPQIYus52oyPUwKlm7ea.fO588L1PPOigcVpavrlc8o4UIGZkNi.'),
+(5, 'Théophile', '["ROLE_USER"]', '$2y$13$HhPQIYus52oyPUwKlm7ea.fO588L1PPOigcVpavrlc8o4UIGZkNi.'),
+(6, 'Antoine', '["ROLE_USER"]', '$2y$13$HhPQIYus52oyPUwKlm7ea.fO588L1PPOigcVpavrlc8o4UIGZkNi.');
 ```
 
 ## 🌐 Accès
@@ -112,6 +114,8 @@ INSERT INTO user (id, username, roles, password) VALUES
 | `Hakim` | `toto123` | ROLE_USER |
 | `Mohand` | `toto123` | ROLE_USER |
 | `Cyril` | `toto123` | ROLE_USER |
+| `Théophile` | `toto123` | ROLE_USER |
+| `Antoine` | `toto123` | ROLE_USER |
 
 ## 🗂️ Structure du projet
 
@@ -121,7 +125,6 @@ phrase_du_jour/
 │   ├── src/
 │   │   ├── Controller/
 │   │   │   ├── AdminController.php
-│   │   │   ├── HomeController.php
 │   │   │   ├── SentenceController.php
 │   │   │   ├── SecurityController.php
 │   │   │   └── RegistrationController.php
@@ -137,7 +140,6 @@ phrase_du_jour/
 │   │       └── SentenceType.php
 │   └── templates/
 │       ├── admin/
-│       ├── home/
 │       ├── registration/
 │       ├── security/
 │       ├── sentence/
