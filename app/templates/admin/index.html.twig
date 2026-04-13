@@ -26,7 +26,12 @@
                     </span>
                 </td>
                 <td><a href="{{ path('app_admin_save', {id: sentence.id}) }}" class="text-decoration-none">✏️</a></td>
-                <td><a href="#" class="text-decoration-none">❌</a></td>
+                <td>
+                    <form method="post" action="{{ path('app_admin_delete', {id: sentence.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette phrase ?')">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ sentence.id) }}">
+                    <button type="submit" style="background:none;border:none;cursor:pointer;">❌</button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
