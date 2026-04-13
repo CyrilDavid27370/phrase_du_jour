@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ sentence.id ? 'Modifier' : 'Ajouter' }} une phrase du jour{% endblock %}
+
+{% block body %}
+    <h1 class="text-center mt-4">{{ sentence.id ? 'Modifier' : 'Ajouter' }} une phrase du jour</h1>
+
+    {{ form_start(form) }}
+        <div class="mb-3">
+            {{ form_label(form.content) }}
+            {{ form_widget(form.content) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(form.category) }}
+            {% for choice in form.category %}
+                <div class="form-check">
+                    {{ form_widget(choice) }}
+                    {{ form_label(choice) }}
+                </div>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn btn-primary">
+            {{ sentence.id ? 'Modifier' : 'Ajouter' }}
+        </button>
+    {{ form_end(form) }}
+{% endblock %}

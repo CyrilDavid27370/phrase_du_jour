@@ -11,7 +11,8 @@
 {% block body %}
     <h1 class="text-center mt-4">Espace administration</h1>
 
-    <a href="{{ path('app_admin_add') }}" class="text-dark text-decoration-none mb-3 d-block">Ajouter une phrase du jour ➕</a>
+    <a href="{{ path('app_admin_save') }}" class="text-dark text-decoration-none mb-3 d-block">Ajouter une phrase du jour ➕</a>
+
 
     <table class="table mt-2">
         <tbody>
@@ -24,7 +25,7 @@
                         {{ sentence.category.name }}
                     </span>
                 </td>
-                <td><a href="{{ path('app_admin_update', {id: sentence.id}) }}" class="text-decoration-none">✏️</a></td>
+                <td><a href="{{ path('app_admin_save', {id: sentence.id}) }}" class="text-decoration-none">✏️</a></td>
                 <td><a href="#" class="text-decoration-none">❌</a></td>
             </tr>
             {% endfor %}

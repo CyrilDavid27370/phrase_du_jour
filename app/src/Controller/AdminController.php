@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controller;
+
 use App\Entity\Sentence;
 use App\Form\SentenceType;
 use App\Repository\SentenceRepository;
@@ -24,45 +25,35 @@ final class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/add', name: 'app_admin_add')]
-    public function add(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/admin/save/{id}', name: 'app_admin_save', defaults: ['id' => null])]
+    public function save(Request $request, EntityManagerInterface $entityManager, ?Sentence $sentence = null): Response
     {
-        $sentence = new Sentence();
-        $form = $this->createForm(SentenceType::class, $sentence);
-        $form->handleRequest($request);
-        
-        if ($form->isSubmitted() && $form->isValid()) {
-            $sentence->setCreatedAt(new \DateTimeImmutable());
-            $sentence->setLikes(0);
 
-            $entityManager->persist($sentence);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Phrase ajoutée avec succès !');
-            return $this->redirectToRoute(('app_admin_index'));
+        if (!$sentence) {
+            $sentence = new Sentence();
         }
 
-        return $this->render('admin/add.html.twig', [
-            'form' => $form->createView()
+        $form = $this->createForm(SentenceType::class, $sentence);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+    $isNew = !$sentence->getId();
+
+    if ($isNew) {
+        $sentence->setCreatedAt(new \DateTimeImmutable());
+        $sentence->setLikes(0);
+    }
+
+    $entityManager->persist($sentence);
+    $entityManager->flush();
+
+    $this->addFlash('success', $isNew ? 'Phrase ajoutée avec succès !' : 'Phrase modifiée avec succès !');
+        return $this->redirectToRoute('app_admin_index');
+        }
+        
+        return $this->render('admin/save.html.twig', [
+            'form' => $form->createView(),
+            'sentence' => $sentence
         ]);
     }
-
-    #[Route('/admin/update/{id}', name: 'app_admin_update')]
-public function update(Sentence $sentence, Request $request, EntityManagerInterface $entityManager): Response
-{
-    $form = $this->createForm(SentenceType::class, $sentence);
-    $form->handleRequest($request);
-
-    if ($form->isSubmitted() && $form->isValid()) {
-        $entityManager->flush();
-
-        $this->addFlash('success', 'Phrase modifiée avec succès !');
-        return $this->redirectToRoute('app_admin_index');
-    }
-
-    return $this->render('admin/update.html.twig', [
-        'form' => $form->createView(),
-        'sentence' => $sentence,
-    ]);
-}
 }
