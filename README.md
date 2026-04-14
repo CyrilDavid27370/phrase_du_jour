@@ -4,10 +4,11 @@ Projet Symfony 7 réalisé en autonomie dans le cadre de la formation **DWWM** �
 
 ## 📋 Description
 
-Application web permettant de découvrir et partager des phrases du jour. Les utilisateurs peuvent consulter les phrases, les liker et les commenter. Un espace d'administration permet de gérer les phrases.
+Application web permettant de découvrir et partager des phrases du jour. Les utilisateurs peuvent consulter les phrases, les liker et les commenter. Un espace d'administration permet de gérer les phrases et de modérer les commentaires.
 
 ## 🚀 Fonctionnalités
 
+### Version 1
 - 📖 Affichage des phrases du jour par date décroissante
 - 🔍 Découverte d'une phrase du jour avec sa catégorie
 - 👍 Système de like (1 like par utilisateur connecté)
@@ -17,6 +18,13 @@ Application web permettant de découvrir et partager des phrases du jour. Les ut
   - Ajout d'une phrase
   - Modification d'une phrase
   - Suppression avec confirmation et protection CSRF
+
+### Version 2
+- 🏷️ Filtre par catégorie sur la page d'accueil
+- 🌙 Mode sombre / clair (dark mode)
+- 🚩 Signalement de commentaires inappropriés
+  - Modération des commentaires signalés en espace admin (supprimer ou conserver)
+- ✏️ Modifier et supprimer son propre commentaire
 
 ## 🛠️ Stack technique
 
@@ -134,12 +142,16 @@ phrase_du_jour/
 │   │   │   ├── Like.php
 │   │   │   ├── Sentence.php
 │   │   │   └── User.php
-│   │   └── Form/
-│   │       ├── CommentType.php
-│   │       ├── RegistrationFormType.php
-│   │       └── SentenceType.php
+│   │   ├── Form/
+│   │   │   ├── CommentType.php
+│   │   │   ├── RegistrationFormType.php
+│   │   │   └── SentenceType.php
+│   │   └── Repository/
+│   │       └── SentenceRepository.php
 │   └── templates/
 │       ├── admin/
+│       ├── comment/
+│       ├── home/
 │       ├── registration/
 │       ├── security/
 │       ├── sentence/

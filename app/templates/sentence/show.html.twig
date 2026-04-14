@@ -31,19 +31,27 @@
         <p class="text-muted mt-3">Soyez le premier à commenter !</p>
     {% else %}
         {% for comment in comments %}
-            <p class="mt-3">
-                <strong>{{ comment.author.username }}</strong>
-                (le {{ comment.createdAt|date('d/m/Y à H:i:s') }}) :
-                {{ comment.content }}
-                
-                {% if app.user and app.user != comment.author and not comment.isReported %}
-                <a href="{{ path('app_comment_report', {id: comment.id}) }}"
-                class="text-decoration-none ms-2"
-                title="Signaler ce commentaire">
-                🚩
-                </a>
+    <div class="mt-3">
+        <strong>{{ comment.author.username }}</strong>
+        (le {{ comment.createdAt|date('d/m/Y à H:i:s') }}) :
+        {{ comment.content }}
+
+        {% if app.user and app.user == comment.author %}
+            <a href="{{ path('app_comment_update', {id: comment.id}) }}" class="text-decoration-none ms-2">✏️</a>
+            <form method="post" action="{{ path('app_comment_delete', {id: comment.id}) }}" class="d-inline ms-1">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete_comment' ~ comment.id) }}">
+                <button type="submit" style="background:none;border:none;cursor:pointer;">❌</button>
+            </form>
         {% endif %}
-            </p>
-        {% endfor %}
+
+        {% if app.user and app.user != comment.author and not comment.isReported %}
+            <a href="{{ path('app_comment_report', {id: comment.id}) }}"
+            class="text-decoration-none ms-2"
+            title="Signaler ce commentaire">
+                🚩
+            </a>
+        {% endif %}
+    </div>
+{% endfor %}
     {% endif %}
 {% endblock %}

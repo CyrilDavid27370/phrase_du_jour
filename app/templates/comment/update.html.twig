@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier mon commentaire{% endblock %}
+
+{% block body %}
+    <h1 class="text-center mt-4">Modifier mon commentaire</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form.content) }}
+        <button type="submit" class="btn btn-primary mt-2">Modifier</button>
+        <a href="{{ path('app_sentence_show', {id: comment.sentence.id}) }}" class="btn btn-secondary mt-2">Annuler</a>
+    {{ form_end(form) }}
+{% endblock %}

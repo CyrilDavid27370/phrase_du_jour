@@ -113,4 +113,43 @@ final class SentenceController extends AbstractController
 
         return $this->redirectToRoute('app_sentence_show', ['id' => $comment->getSentence()->getId()]);
     }
-}
+
+    #[Route('/comment/{id}/update', name: 'app_comment_update')]
+    public function editComment(Comment $comment, EntityManagerInterface $entityManager, Request $request) : Response 
+    {
+        if ($this->getUser() !== $comment->getAuthor()) {
+            throw $this->createAccessDeniedException("Vous n'avez pas la permission d'éditer ce commentaire.");
+        }
+
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+            $this->addFlash('success', 'Commentaire mis à jour avec succès.');
+
+            return $this->redirectToRoute('app_sentence_show', ['id' => $comment->getSentence()->getId()]);
+        }
+
+        return $this->render('comment/update.html.twig', [
+            'form' => $form->createView(),
+            'comment' => $comment,
+        ]);
+    }
+
+        #[Route('/comment/{id}/delete', name: 'app_comment_delete', methods: ['POST'])]
+        public function deleteComment(Comment $comment, EntityManagerInterface $entityManager, Request $request) : Response
+        {
+            if ($this->getUser() !== $comment->getAuthor()) {
+                throw $this->createAccessDeniedException("Vous n'avez pas la permission de supprimer ce commentaire.");
+            }
+
+            if ($this->isCsrfTokenValid('delete_comment' . $comment->getId(), $request->request->get('_token'))) {
+                $entityManager->remove($comment);
+                $entityManager->flush();
+                $this->addFlash('success', 'Commentaire supprimé avec succès.');
+            }
+                return $this->redirectToRoute('app_sentence_show', ['id' => $comment->getSentence()->getId()]);
+            }
+
+        }
