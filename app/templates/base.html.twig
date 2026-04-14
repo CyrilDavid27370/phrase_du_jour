@@ -10,22 +10,23 @@
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
-    <body>
+    <body data-bs-theme="light">
         <nav class="navbar navbar-expand-lg navbar-light bg-primary">
             <div class="container-fluid">
                 <a class="navbar-brand" href="{{ path('app_home') }}">Phrase du jour</a>
                 <div class="navbar-nav me-auto">
                     <a class="nav-link" href="{{ path('app_home') }}">Accueil</a>
                     {% if app.user %}
-                    {% if is_granted('ROLE_ADMIN') %}
-                    <a class="nav-link" href="{{ path('app_admin_index') }}">Admin</a>
-                    {% endif %}
-                    <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a class="nav-link" href="{{ path('app_admin_index') }}">Admin</a>
+                        {% endif %}
+                        <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
                     {% else %}
-                    <a class="nav-link" href="{{ path('app_login') }}">Connexion</a>
-                    <a class="nav-link" href="{{ path('app_register') }}">Enregistrement</a>
+                        <a class="nav-link" href="{{ path('app_login') }}">Connexion</a>
+                        <a class="nav-link" href="{{ path('app_register') }}">Enregistrement</a>
                     {% endif %}
                 </div>
+                <button id="theme-toggle" class="btn btn-sm ms-auto">🌙</button>
             </div>
         </nav>
 
@@ -44,5 +45,24 @@
         <div class="container mt-4">
             {% block body %}{% endblock %}
         </div>
+
+        <script>
+            const body = document.body;
+            const btn = document.getElementById('theme-toggle');
+
+            // Charge le thème sauvegardé
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            body.setAttribute('data-bs-theme', savedTheme);
+            btn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+            // Bascule le thème au clic
+            btn.addEventListener('click', () => {
+                const current = body.getAttribute('data-bs-theme');
+                const next = current === 'dark' ? 'light' : 'dark';
+                body.setAttribute('data-bs-theme', next);
+                localStorage.setItem('theme', next);
+                btn.textContent = next === 'dark' ? '☀️' : '🌙';
+            });
+        </script>
     </body>
 </html>
