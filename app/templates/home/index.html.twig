@@ -12,6 +12,19 @@
 {% block body %}
     <h1 class="text-center mt-4">Les phrases du jour</h1>
 
+    <div class="d-flex flex-wrap gap-2 justify-content-center mt-3">
+        <a href="{{ path('app_home') }}"
+            class="badge text-decoration-none {{ currentCategory is null ? 'rounded' : 'rounded-pill' }} bg-secondary">
+            toutes les phrases
+        </a>
+        {% for category in categories %}
+            <a href="{{ path('app_home', {category: category.id}) }}"
+                class="badge text-decoration-none {{ currentCategory == category.id ? 'rounded' : 'rounded-pill' }} bg-{{ category.color }}">
+                {{ category.name }}
+            </a>
+        {% endfor %}
+    </div>
+
     <table class="table mt-4">
         <tbody>
             {% for sentence in sentences %}
@@ -22,7 +35,7 @@
                     </a>
                 </td>
                 <td>
-                    <span class="badge bg-{{ sentence.category.color }}">
+                    <span class="badge rounded-pill bg-{{ sentence.category.color }}">
                         {{ sentence.category.name }}
                     </span>
                 </td>

@@ -6,6 +6,7 @@ use App\Entity\Comment;
 use App\Entity\Like;
 use App\Entity\Sentence;
 use App\Form\CommentType;
+use App\Repository\CategoryRepository;
 use App\Repository\CommentRepository;
 use App\Repository\LikeRepository;
 use App\Repository\SentenceRepository;
@@ -18,12 +19,17 @@ use Symfony\Component\Routing\Attribute\Route;
 final class SentenceController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function index(SentenceRepository $sentenceRepository): Response
+    public function index(SentenceRepository $sentenceRepository, CategoryRepository $categoryRepository , Request $request): Response
     {
-        $sentences = $sentenceRepository->findBy([], ['createdAt' => 'DESC']);
+        
+        $categoryId = $request->query->getInt('category') ?: null;
+        $sentences = $sentenceRepository->findByCategory($categoryId);
+        $categories = $categoryRepository->findAll();
         
         return $this->render('home/index.html.twig', [
-            'sentences' => $sentences
+            'sentences' => $sentences,
+            'categories' => $categories,
+            'currentCategory' => $categoryId,
         ]);
     }
 

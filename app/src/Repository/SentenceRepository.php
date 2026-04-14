@@ -15,29 +15,17 @@ class SentenceRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Sentence::class);
     }
+    
+    public function findByCategory(?int $categoryId) : array
+    {
+        $queryBuilder = $this->createQueryBuilder('s')
+        ->orderBy('s.createdAt', 'DESC');
 
-    //    /**
-    //     * @return Sentence[] Returns an array of Sentence objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('s.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+        if($categoryId) {
+            $queryBuilder->andWhere('s.category = :categoryId')
+            ->setParameter('categoryId', $categoryId);
+        }
 
-    //    public function findOneBySomeField($value): ?Sentence
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        return $queryBuilder->getQuery()->getResult();
+    }
 }
