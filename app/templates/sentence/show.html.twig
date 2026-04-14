@@ -35,6 +35,14 @@
                 <strong>{{ comment.author.username }}</strong>
                 (le {{ comment.createdAt|date('d/m/Y à H:i:s') }}) :
                 {{ comment.content }}
+                
+                {% if app.user and app.user != comment.author and not comment.isReported %}
+                <a href="{{ path('app_comment_report', {id: comment.id}) }}"
+                class="text-decoration-none ms-2"
+                title="Signaler ce commentaire">
+                🚩
+                </a>
+        {% endif %}
             </p>
         {% endfor %}
     {% endif %}

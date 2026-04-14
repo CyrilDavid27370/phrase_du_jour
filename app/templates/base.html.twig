@@ -31,16 +31,18 @@
         </nav>
 
         {% for message in app.flashes('success') %}
-            <div class="alert alert-success text-center mb-0">
-                {{ message }}
-            </div>
-        {% endfor %}
+        <div class="alert alert-success alert-dismissible fade show mx-auto mt-2" style="max-width: 400px;">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+{% endfor %}
 
-        {% for message in app.flashes('error') %}
-            <div class="alert alert-danger text-center mb-0">
-                {{ message }}
-            </div>
-        {% endfor %}
+{% for message in app.flashes('error') %}
+    <div class="alert alert-danger alert-dismissible fade show mx-auto mt-2" style="max-width: 400px;">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+{% endfor %}
 
         <div class="container mt-4">
             {% block body %}{% endblock %}

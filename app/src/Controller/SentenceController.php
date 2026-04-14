@@ -100,4 +100,17 @@ final class SentenceController extends AbstractController
 
         return $this->redirectToRoute('app_sentence_show', ['id' => $sentence->getId()]);
     }
+
+    #[Route('/comment/{id}/report', name: 'app_comment_report')]
+    public function report(Comment $comment, EntityManagerInterface $entityManager) : Response
+    {
+        if(!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $comment->setIsReported(true);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_sentence_show', ['id' => $comment->getSentence()->getId()]);
+    }
 }

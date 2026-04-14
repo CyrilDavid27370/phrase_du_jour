@@ -28,6 +28,9 @@ class Comment
     #[ORM\JoinColumn(nullable: false)]
     private ?Sentence $sentence = null;
 
+    #[ORM\Column]
+    private ?bool $isReported = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -77,6 +80,18 @@ class Comment
     public function setSentence(?Sentence $sentence): static
     {
         $this->sentence = $sentence;
+
+        return $this;
+    }
+
+    public function isReported(): ?bool
+    {
+        return $this->isReported;
+    }
+
+    public function setIsReported(bool $isReported): static
+    {
+        $this->isReported = $isReported;
 
         return $this;
     }

@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Sentence;
 use App\Form\SentenceType;
+use App\Repository\CommentRepository;
 use App\Repository\SentenceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,12 +18,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class AdminController extends AbstractController
 {
     #[Route('/admin', name: 'app_admin_index')]
-    public function index(SentenceRepository $sentenceRepository): Response
+    public function index(SentenceRepository $sentenceRepository, CommentRepository $commentRepository): Response
     {
         $sentences = $sentenceRepository->findBy([], ['createdAt' => 'DESC']);
+        $reportedCount = $commentRepository->count(['isReported' => true]);
 
         return $this->render('admin/index.html.twig', [
-            'sentences' => $sentences
+            'sentences' => $sentences,
+            'reportedCount' => $reportedCount
         ]);
     }
 
@@ -37,20 +41,20 @@ final class AdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-    $isNew = !$sentence->getId();
+            $isNew = !$sentence->getId();
 
-    if ($isNew) {
-        $sentence->setCreatedAt(new \DateTimeImmutable());
-        $sentence->setLikes(0);
-    }
+            if ($isNew) {
+                $sentence->setCreatedAt(new \DateTimeImmutable());
+                $sentence->setLikes(0);
+            }
 
-    $entityManager->persist($sentence);
-    $entityManager->flush();
+            $entityManager->persist($sentence);
+            $entityManager->flush();
 
-    $this->addFlash('success', $isNew ? 'Phrase ajoutée avec succès !' : 'Phrase modifiée avec succès !');
-        return $this->redirectToRoute('app_admin_index');
+            $this->addFlash('success', $isNew ? 'Phrase ajoutée avec succès !' : 'Phrase modifiée avec succès !');
+            return $this->redirectToRoute('app_admin_index');
         }
-        
+
         return $this->render('admin/save.html.twig', [
             'form' => $form->createView(),
             'sentence' => $sentence
@@ -60,13 +64,47 @@ final class AdminController extends AbstractController
     #[Route('/admin/delete/{id}', name: 'app_admin_delete', methods: ['POST'])]
     public function delete(EntityManagerInterface $entityManager, Sentence $sentence, Request $request): Response
     {
-    if ($this->isCsrfTokenValid('delete'.$sentence->getId(), $request->request->get('_token'))) {
-        $entityManager->remove($sentence); // "remote" → "remove"
-        $entityManager->flush();
-        $this->addFlash('success', 'Phrase supprimée avec succès !'); // double é supprimé
+        if ($this->isCsrfTokenValid('delete' . $sentence->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($sentence); // "remote" → "remove"
+            $entityManager->flush();
+            $this->addFlash('success', 'Phrase supprimée avec succès !'); // double é supprimé
+        }
+
+        return $this->redirectToRoute('app_admin_index');
     }
 
-    return $this->redirectToRoute('app_admin_index');
-    
+    #[Route('/admin/reported', name: 'app_admin_reported')]
+    public function reported(CommentRepository $commentRepository): Response {
+        
+        $reportedComments = $commentRepository->findBy(['isReported' => true]);
+        
+        return $this->render('admin/reported.html.twig', [
+            'comments' => $reportedComments
+        ]);
+    }
+
+    #[Route('/admin/comment/delete/{id}', name: 'app_admin_comment_delete', methods: ['POST'])]
+    public function deleteComment(Comment $comment, EntityManagerInterface $entityManager, Request $request): Response 
+    {
+        if($this->isCsrfTokenValid('delete_comment' . $comment->getId(), $request->request->get('_token'))) {
+
+            $comment->setIsReported(false);
+            $entityManager->remove($comment);
+            $entityManager->flush();
+            $this->addFlash('success', 'Commentaire supprimé avec succès !');
+        }
+        return $this->redirectToRoute('app_admin_reported');
+    }
+
+    #[Route('/admin/comment/keep/{id}', name: 'app_admin_comment_keep', methods: ['POST'])]
+    public function keepComment(Comment $comment, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        
+        $comment->setIsReported(false);
+        $entityManager->flush();
+        $this->addFlash('success', 'Commentaire conservé avec succès !');
+
+        return $this->redirectToRoute('app_admin_reported');
+
     }
 }

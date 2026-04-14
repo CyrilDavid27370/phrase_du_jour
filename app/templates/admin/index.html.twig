@@ -10,8 +10,14 @@
 
 {% block body %}
     <h1 class="text-center mt-4">Espace administration</h1>
+    
+    {% if reportedCount > 0 %}
+    <a href="{{ path('app_admin_reported') }}" class="text-decoration-none text-danger mb-3 d-block">
+        🚩 {{ reportedCount }} commentaire(s) signalé(s) en attente
+    </a>
+{% endif %}
 
-    <a href="{{ path('app_admin_save') }}" class="text-dark text-decoration-none mb-3 d-block">Ajouter une phrase du jour ➕</a>
+    <a href="{{ path('app_admin_save') }}" class="text-body text-decoration-none mb-3 d-block">Ajouter une phrase du jour ➕</a>
 
 
     <table class="table mt-2">

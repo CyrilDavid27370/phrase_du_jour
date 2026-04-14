@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commentaires signalés{% endblock %}
+
+{% block body %}
+    <h1 class="text-center mt-4">Commentaires signalés 🚩</h1>
+
+    {% if comments is empty %}
+        <p class="text-muted text-center mt-4">Aucun commentaire signalé.</p>
+    {% else %}
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th>Auteur</th>
+                    <th>Commentaire</th>
+                    <th>Phrase</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for comment in comments %}
+                <tr style="background-color: #e9ecef;">
+                    <td>{{ comment.author.username }}</td>
+                    <td>{{ comment.content }}</td>
+                    <td>{{ comment.sentence.createdAt|date('d/m/Y') }}</td>
+                    <td>{{ comment.createdAt|date('d/m/Y à H:i') }}</td>
+                    <td>
+                        <form method="post" action="{{ path('app_admin_comment_delete', {id: comment.id}) }}" class="d-inline">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete_comment' ~ comment.id) }}">
+                            <button type="submit" class="btn btn-sm btn-danger">❌ Supprimer</button>
+                        </form>
+                        <form method="post" action="{{ path('app_admin_comment_keep', {id: comment.id}) }}" class="d-inline">
+                            <input type="hidden" name="_token" value="{{ csrf_token('keep_comment' ~ comment.id) }}">
+                            <button type="submit" class="btn btn-sm btn-success">✅ Conserver</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
